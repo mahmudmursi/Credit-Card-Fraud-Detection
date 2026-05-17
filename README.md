@@ -1,516 +1,347 @@
-# 💳 Credit Card Fraud Detection using Machine Learning
+# 💳 Credit Card Fraud Detection
 
-## 📌 Project Overview
+An end-to-end Machine Learning project for detecting fraudulent credit card transactions using real-world highly imbalanced financial data.
 
-Credit card fraud detection is one of the most important real-world applications of Machine Learning in the financial sector.
+This project demonstrates a complete ML workflow, including:
 
-This project builds a complete fraud detection pipeline using multiple machine learning models to identify fraudulent credit card transactions from highly imbalanced transactional data.
-
-The project focuses not only on model accuracy, but also on:
-
-* Recall optimization
-* Fraud detection capability
-* Threshold tuning
-* Cross-validation reliability
-* Business-oriented evaluation
-
----
-
-# 🚀 Results Highlights
-
-* ROC-AUC Score: 0.9759
-* F1-score: 0.87
-* False Positives: 5 only
-* Fraud Detection Recall: 81%
-* Strong performance on highly imbalanced data
+* data preprocessing
+* feature engineering
+* model training
+* hyperparameter tuning
+* evaluation metrics
+* ROC-AUC analysis
+* Precision-Recall analysis
+* threshold optimization
+* calibration
+* monitoring and drift detection
+* explainability
+* model serialization
+* production-style inference
 
 ---
 
-# 🎯 Project Objectives
+# 🎯 Problem Statement
 
-The main goals of this project are:
+Credit card fraud causes significant financial losses worldwide.
 
-* Detect fraudulent transactions effectively
-* Handle severe class imbalance
-* Compare multiple ML algorithms
-* Improve model performance using:
+The goal of this project is to build a machine learning system capable of detecting fraudulent transactions while minimizing false positives.
 
-  * Feature Engineering
-  * Hyperparameter Tuning
-  * Threshold Optimization
-* Analyze business trade-offs between:
+Since fraud detection datasets are highly imbalanced, traditional accuracy metrics are not sufficient. Instead, this project focuses on:
 
-  * Fraud detection
-  * False alarms
+* Precision
+* Recall
+* F1 Score
+* ROC-AUC
+* Precision-Recall analysis
 
 ---
 
-# 📂 Dataset Information
+# 📂 Dataset
 
-Dataset: Credit Card Fraud Detection Dataset
+Dataset used:
 
-The dataset contains anonymized credit card transactions made by European cardholders.
+**Credit Card Fraud Detection Dataset**
 
-## Dataset Characteristics
+Characteristics:
 
-| Property           | Value   |
-| ------------------ | ------- |
-| Total Transactions | 284,807 |
-| Fraud Cases        | 492     |
-| Fraud Ratio        | 0.172%  |
-| Features           | 31      |
-| Target Column      | `Class` |
+* Highly imbalanced dataset
+* Fraudulent transactions represent a very small percentage of total observations
+* Features are anonymized PCA components (`V1–V28`)
+* Includes:
 
----
+  * `Time`
+  * `Amount`
+  * `Class`
 
-# ⚠️ Problem Type
-
-## Imbalanced Binary Classification
-
-Where:
-
-* `0` → Normal Transaction
-* `1` → Fraudulent Transaction
-
-Due to the extreme imbalance:
-
-* Accuracy alone is misleading
-* Recall and F1-score are critical metrics
-
----
-
-# 🧠 Machine Learning Workflow
+Target variable:
 
 ```text
-EDA
-→ Visualization
-→ Feature Engineering
-→ Scaling
-→ Modeling
-→ Cross Validation
-→ Hyperparameter Tuning
-→ Threshold Optimization
-→ Model Evaluation
-→ Business Interpretation
+Class
+0 → Normal transaction
+1 → Fraudulent transaction
 ```
 
 ---
 
-# 🔎 Exploratory Data Analysis (EDA)
+# 🛠️ Technologies Used
 
-Performed detailed exploratory analysis including:
+* Python
+* Pandas
+* NumPy
+* Matplotlib
+* Scikit-Learn
+* Joblib
+* Jupyter Notebook
 
-* Dataset structure inspection
-* Missing value analysis
-* Fraud distribution analysis
-* Transaction amount analysis
-* Time distribution analysis
-* Correlation matrix analysis
+Machine Learning concepts used:
 
----
-
-# 📊 Key EDA Insights
-
-## ⚠️ Severe Class Imbalance
-
-Fraudulent transactions represent less than:
-
-```text
-0.172%
-```
-
-of the entire dataset.
-
----
-
-## 💰 Transaction Amount Distribution
-
-* Most transactions are low-value transactions
-* Fraud cases are concentrated around smaller amounts
-* Large outliers exist in normal transactions
+* Pipelines
+* Random Forest
+* Logistic Regression
+* Gradient Boosting
+* GridSearchCV
+* Cross Validation
+* ROC-AUC
+* Precision-Recall Curve
+* Threshold Tuning
+* Calibration
+* Drift Monitoring
+* Feature Importance
+* Model Serialization
 
 ---
 
-## 🔥 Correlation Insights
+# ⚙️ Project Workflow
 
-Some PCA-transformed features showed stronger relationships with fraud activity, especially:
+The project follows an end-to-end machine learning pipeline:
 
-* V12
-* V14
-* V17
-* V10
+1. Data Loading
+2. Exploratory Data Analysis (EDA)
+3. Data Cleaning
+4. Feature Engineering
+5. Model Building
+6. Hyperparameter Tuning
+7. Model Evaluation
+8. Threshold Optimization
+9. Calibration Analysis
+10. Monitoring
+11. Explainability
+12. Production Inference
+13. Final Model Selection
 
 ---
 
-# 🛠️ Feature Engineering
+# 🧹 Feature Engineering
 
-Several feature engineering techniques were applied.
-
----
-
-## 🔄 Log Transformation
-
-The `Amount` feature was highly skewed.
-
-Applied:
+A log transformation was applied to transaction amounts:
 
 ```python
-df['Amount_log'] = np.log1p(df['Amount'])
-```
-
-Benefits:
-
-* Reduced skewness
-* Compressed outliers
-* Stabilized feature distribution
-
----
-
-## 🔗 Interaction Features
-
-Created new interaction features:
-
-```python
-df['V12_V14'] = df['V12'] * df['V14']
-df['V10_V17'] = df['V10'] * df['V17']
+Amount_log = np.log1p(Amount)
 ```
 
 Purpose:
 
-* Capture non-linear fraud patterns
-* Improve representation learning
-* Detect combined anomalies
+* reduce skewness
+* improve numerical stability
+* normalize transaction amount distribution
 
 ---
 
-# ⚖️ Scaling & Normalization
+# 🤖 Models Evaluated
 
-Applied `StandardScaler` to evaluate its impact on Logistic Regression.
+Several machine learning models were tested and compared.
 
-## Observation
-
-Scaling did not improve performance significantly because:
-
-* Features were already PCA-transformed
-* Dataset was partially normalized beforehand
-
-## Important Insight
-
-Preprocessing techniques should always be validated experimentally.
+| Model                         | Precision | Recall | F1 Score |
+| ----------------------------- | --------- | ------ | -------- |
+| Logistic Regression           | 0.85      | 0.73   | 0.79     |
+| Logistic Regression + Scaling | 0.83      | 0.63   | 0.72     |
+| Gradient Boosting             | 0.83      | 0.60   | 0.70     |
+| Random Forest                 | 0.94      | 0.83   | 0.88     |
+| Tuned Random Forest           | 0.93      | 0.81   | 0.86     |
 
 ---
 
-# 🤖 Models Trained
+# 🏆 Final Selected Model
 
-| Model                        |
-| ---------------------------- |
-| Logistic Regression          |
-| Logistic Regression (Scaled) |
-| Decision Tree                |
-| Random Forest                |
-| Gradient Boosting            |
-| Tuned Random Forest          |
+## Random Forest Classifier
 
----
+Random Forest was selected as the final production-ready model because it achieved the strongest balance between:
 
-# 📈 Model Performance Comparison
+* precision
+* recall
+* robustness
+* generalization
 
-| Model | Precision | Recall | F1-score |
-|--|--|--|--|
-| Logistic Regression | 0.85 | 0.73 | 0.79 |
-| Logistic Regression (Scaled) | 0.83 | 0.65 | 0.73 |
-| Decision Tree | 0.89 | 0.78 | 0.83 |
-| Random Forest | 0.95 | 0.82 | 0.88 |
-| Tuned Random Forest | 0.94 | 0.81 | 0.87 |
-| Gradient Boosting | 0.83 | 0.60 | 0.70 |
+### Why Random Forest?
+
+The model provided:
+
+* strong fraud detection capability
+* low false positive rate
+* stable cross-validation performance
+* excellent ROC-AUC score
+* strong performance on imbalanced data
 
 ---
 
-## 🚀 Gradient Boosting Analysis
+# 📊 Final Model Performance
 
-Gradient Boosting achieved strong precision but lower recall compared to Random Forest.
+| Metric    | Score  |
+| --------- | ------ |
+| Precision | 0.95   |
+| Recall    | 0.82   |
+| F1 Score  | 0.88   |
+| ROC-AUC   | 0.9787 |
 
-### Key Observation
+### Confusion Matrix
 
-The model became more conservative when predicting fraud transactions.
+```text
+TN = 56860
+FP = 4
+FN = 18
+TP = 80
+```
 
-As a result:
-- False positives decreased
-- Missed fraud cases increased
+Interpretation:
 
-### Business Interpretation
-
-In fraud detection systems, Recall is often more important than Precision because:
-
-- Missing fraudulent transactions can lead to direct financial losses
-- False alarms are generally less costly
-
-Therefore, Random Forest remained the preferred final model for this project.
-
----
-
-# 🌲 Final Selected Model
-
-## Tuned Random Forest
-
-Selected because it achieved:
-
-* Strong fraud detection capability
-* Stable cross-validation performance
-* Excellent Precision/Recall balance
-* Reliable generalization
+* Only 4 legitimate transactions were incorrectly flagged as fraud.
+* The model successfully detected 80 fraudulent transactions.
+* 18 fraud cases were missed.
 
 ---
 
-# 🔥 Hyperparameter Tuning
+# 📈 ROC-AUC Analysis
 
-Used `GridSearchCV` to optimize:
+ROC-AUC score:
 
-* `n_estimators`
-* `max_depth`
-* `min_samples_split`
+```text
+0.9787
+```
 
-## Best Parameters
+A high ROC-AUC indicates that the model can effectively separate fraudulent transactions from normal ones.
+
+---
+
+# 📉 Precision-Recall Curve
+
+Because fraud detection is highly imbalanced, Precision-Recall analysis was essential.
+
+The model maintained:
+
+* strong precision
+* strong recall
+* balanced fraud detection performance
+
+This metric is often more informative than accuracy for fraud detection systems.
+
+---
+
+# 🎯 Threshold Optimization
+
+Different prediction thresholds were evaluated.
+
+### Threshold Tradeoff
+
+Lower threshold:
+
+* higher recall
+* more fraud detection
+* more false positives
+
+Higher threshold:
+
+* fewer false positives
+* lower recall
+* higher chance of missing fraud
+
+This analysis simulates real-world business decisions in banking systems.
+
+---
+
+# 📏 Calibration Analysis
+
+Calibration was performed to evaluate whether model probabilities reflected actual fraud likelihood.
+
+This is important in financial systems because probability confidence directly impacts business decisions.
+
+---
+
+# 📡 Monitoring & Drift Detection
+
+Feature drift monitoring was simulated by comparing train and test feature distributions.
+
+This helps detect changes in customer transaction behavior over time.
+
+Why this matters:
+
+Fraud patterns evolve.
+
+A model that performs well today may degrade in production if transaction distributions shift.
+
+---
+
+# 🔍 Feature Importance
+
+Feature importance analysis identified the most influential variables affecting fraud detection.
+
+Top features included:
+
+* V17
+* V14
+* V12
+* V10
+* V16
+
+This provides interpretability and insight into model behavior.
+
+---
+
+# 🔮 Production Inference
+
+A reusable inference pipeline was built to simulate real-world prediction systems.
+
+Example:
+
+```python
+result = predict_transaction(
+    model,
+    sample_transaction
+)
+
+print(result)
+```
+
+Example output:
 
 ```python
 {
-    'max_depth': 15,
-    'min_samples_split': 5,
-    'n_estimators': 100
+    "prediction": 0,
+    "fraud_probability": 0.000047
 }
 ```
 
+Meaning:
+
+* prediction = 0 → legitimate transaction
+* fraud probability ≈ 0.0047%
+
 ---
 
-# 🔁 Cross Validation
+# 🔧 Hyperparameter Tuning
 
-Applied:
+GridSearchCV was used to optimize model parameters.
 
-## Stratified K-Fold Cross Validation
+Best parameters:
 
-Purpose:
-
-* Reduce evaluation randomness
-* Preserve fraud ratio across folds
-* Measure generalization stability
-
-## Final Cross Validation Result
-
-```text
-Mean F1 Score ≈ 0.847
+```python
+{
+    'model__max_depth': 15,
+    'model__min_samples_split': 2,
+    'model__n_estimators': 100
+}
 ```
 
----
+Observation:
 
-# 🎯 Threshold Tuning
+Hyperparameter tuning did not outperform the baseline Random Forest.
 
-Different classification thresholds were evaluated.
+This demonstrates an important machine learning lesson:
 
-| Threshold | Precision | Recall | F1-score |
-| --------- | --------- | ------ | -------- |
-| 0.3       | 0.84      | 0.87   | 0.85     |
-| 0.5       | 0.94      | 0.81   | 0.87     |
-| 0.7       | 0.97      | 0.71   | 0.82     |
+**More tuning does not always guarantee better performance.**
 
 ---
 
-# 🧠 Threshold Trade-Off
+# 🧪 Cross Validation
 
-## Lower Thresholds
+Cross-validation was performed to evaluate model stability.
 
-* Detect more fraud
-* Increase false alarms
+Results showed:
 
-## Higher Thresholds
+* consistent performance
+* strong generalization
+* low performance variance
 
-* Reduce false positives
-* Miss more fraud cases
-
----
-
-# 🔍 Confusion Matrix Analysis
-
-| Category             | Count  |
-| -------------------- | ------ |
-| True Negatives (TN)  | 56,859 |
-| False Positives (FP) | 5      |
-| False Negatives (FN) | 19     |
-| True Positives (TP)  | 79     |
-
----
-
-## 🧠 Confusion Matrix Insights
-
-* The model correctly classified most normal transactions
-* False positives are extremely low
-* The model successfully detected most fraud cases
-* Some fraud transactions were still missed
-
-### ⚠️ Business Interpretation
-
-False Positives:
-
-* May inconvenience customers
-* Trigger unnecessary fraud alerts
-
-False Negatives:
-
-* Represent undetected fraud
-* Can lead to financial loss
-
-The current model achieves a strong balance between:
-
-* Fraud detection capability
-* Customer experience
-* Operational reliability
-
----
-
-# 📊 ROC Curve & AUC
-
-Final ROC-AUC Score:
-
-```text
-AUC = 0.9759
-```
-
-## Interpretation
-
-The model demonstrates:
-
-* Excellent discrimination capability
-* Strong fraud separation performance
-* Robust classification quality
-
----
-
-## 🧠 ROC Curve Analysis
-
-The ROC Curve evaluates the model’s ability to distinguish between:
-
-* Fraudulent transactions
-* Normal transactions
-
-### 🎯 Key Insights
-
-* The model separates fraud and normal transactions very effectively
-* High True Positive Rate is achieved with low False Positive Rate
-* Performance remains strong despite severe class imbalance
-
-### 💼 Business Interpretation
-
-A high AUC score means the system can:
-
-* Detect fraudulent transactions reliably
-* Reduce unnecessary fraud alerts
-* Improve trust in automated fraud detection systems
-
----
-
-# 📌 Feature Importance
-
-The Random Forest model identified the following features as most influential:
-
-* V12
-* V17
-* V14
-* V10
-* V11
-
-These features contributed most to distinguishing fraudulent behavior from legitimate transactions.
-
----
-
-# 🧠 Key Technical Insights
-
-This project demonstrates practical experience with:
-
-* Imbalanced classification
-* Feature engineering
-* Ensemble learning
-* Cross-validation
-* Threshold optimization
-* Hyperparameter tuning
-* Model evaluation
-* Business-oriented ML analysis
-
----
-
-# 💼 Business Impact
-
-The final fraud detection system can help financial institutions:
-
-* Detect suspicious transactions early
-* Reduce financial fraud losses
-* Minimize unnecessary customer alerts
-* Improve operational efficiency
-* Support automated fraud prevention systems
-
----
-
-# 🚀 Future Improvements
-
-Possible future enhancements include:
-
-* XGBoost / LightGBM
-* SMOTE oversampling
-* Deep Learning approaches
-* Real-time fraud detection APIs
-* Explainable AI (SHAP values)
-* Streamlit deployment
-* Model monitoring systems
-
----
-
-# ⚙️ Installation
-
-Clone the repository:
-
-```bash
-git clone https://github.com/mahmudmursi/Credit-Card-Fraud-Detection
-```
-
-Move into the project folder:
-
-```bash
-cd Credit-Card-Fraud-Detection
-```
-
-Install dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-# ▶️ How to Run
-
-Launch Jupyter Notebook:
-
-```bash
-jupyter notebook
-```
-
-Open:
-
-```text
-Fraud_Detection_ML_Pipeline.ipynb
-```
-
----
-
-# 🧰 Technologies Used
-
-| Technology   | Purpose              |
-| ------------ | -------------------- |
-| Python       | Core Programming     |
-| Pandas       | Data Analysis        |
-| NumPy        | Numerical Operations |
-| Matplotlib   | Visualization        |
-| Seaborn      | Visualization        |
-| Scikit-learn | Machine Learning     |
-| Joblib       | Model Serialization  |
+This increases confidence in model robustness.
 
 ---
 
@@ -523,52 +354,87 @@ Credit-Card-Fraud-Detection/
 │   └── creditcard.csv
 │
 ├── notebooks/
-│   └── Fraud_Detection_ML_Pipeline.ipynb
+│   └── Credit-Card-Fraud-Detection.ipynb
+│
+├── src/
+│   ├── __init__.py
+│   ├── preprocessing.py
+│   ├── training.py
+│   ├── evaluation.py
+│   └── inference.py
 │
 ├── models/
-│   └── fraud_detection_model.pkl
+│   ├── fraud_detection_model.pkl
+│   ├── fraud_detection_pipeline.pkl
+│   └── final_fraud_pipeline.pkl
 │
 ├── images/
-│   ├── confusion_matrix.png
-│   ├── roc_curve.png
-│   └── feature_importance.png
 │
-├── README.md
+├── requirements.txt
 │
-└── requirements.txt
+├── .gitignore
+│
+└── README.md
 ```
 
 ---
 
-# 📦 requirements.txt
+# ▶️ How to Run
 
-```txt
-pandas
-numpy
-matplotlib
-seaborn
-scikit-learn
-joblib
-jupyter
+## 1. Clone the repository
+
+```bash
+git clone <repository-url>
 ```
 
+## 2. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+## 3. Open Jupyter Notebook
+
+```bash
+jupyter notebook
+```
+
+## 4. Run the notebook
+
+Run all notebook cells from top to bottom.
+
 ---
 
-# 🏁 Final Conclusion
+# 🚀 Future Improvements
 
-This project successfully built a robust fraud detection pipeline capable of handling severe class imbalance while maintaining strong fraud detection performance.
+Potential future upgrades include:
 
-The final model achieved:
-
-* High Precision
-* Strong Recall
-* Excellent AUC score
-* Reliable generalization
-
-The workflow reflects a realistic production-oriented machine learning solution for financial fraud detection systems.
+* REST API deployment
+* Docker containerization
+* Real-time fraud detection
+* MLflow experiment tracking
+* SHAP explainability
+* Streamlit dashboard
 
 ---
 
-# 📜 License
+# 🎯 Final Conclusion
 
-This project is open-source and available under the MIT License.
+In this project, multiple machine learning models were evaluated for credit card fraud detection.
+
+Advanced machine learning concepts were applied, including:
+
+* feature engineering
+* pipelines
+* hyperparameter tuning
+* ROC-AUC analysis
+* Precision-Recall analysis
+* threshold tuning
+* calibration
+* monitoring
+* explainability
+* production-style inference
+
+After experimentation and evaluation, Random Forest was selected as the final production-ready model due to its strong balance between precision, recall, and robustness.
+
+This project demonstrates a complete end-to-end machine learning workflow for solving a real-world fraud detection problem.
