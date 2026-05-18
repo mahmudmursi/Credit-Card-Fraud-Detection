@@ -1,440 +1,291 @@
-# 💳 Credit Card Fraud Detection
+# 💳 Credit Card Fraud Detection API
 
-An end-to-end Machine Learning project for detecting fraudulent credit card transactions using real-world highly imbalanced financial data.
-
-This project demonstrates a complete ML workflow, including:
-
-* data preprocessing
-* feature engineering
-* model training
-* hyperparameter tuning
-* evaluation metrics
-* ROC-AUC analysis
-* Precision-Recall analysis
-* threshold optimization
-* calibration
-* monitoring and drift detection
-* explainability
-* model serialization
-* production-style inference
+A production-ready Machine Learning API for detecting fraudulent credit card transactions using **FastAPI**, **Scikit-learn**, and **Random Forest**.
 
 ---
 
-# 🎯 Problem Statement
+## 🚀 Project Overview
 
-Credit card fraud causes significant financial losses worldwide.
+This project predicts whether a credit card transaction is **fraudulent** or **legitimate** using a trained Machine Learning pipeline.
 
-The goal of this project is to build a machine learning system capable of detecting fraudulent transactions while minimizing false positives.
+The system includes:
 
-Since fraud detection datasets are highly imbalanced, traditional accuracy metrics are not sufficient. Instead, this project focuses on:
-
-* Precision
-* Recall
-* F1 Score
-* ROC-AUC
-* Precision-Recall analysis
-
----
-
-# 📂 Dataset
-
-Dataset used:
-
-**Credit Card Fraud Detection Dataset**
-
-Characteristics:
-
-* Highly imbalanced dataset
-* Fraudulent transactions represent a very small percentage of total observations
-* Features are anonymized PCA components (`V1–V28`)
-* Includes:
-
-  * `Time`
-  * `Amount`
-  * `Class`
-
-Target variable:
-
-```text
-Class
-0 → Normal transaction
-1 → Fraudulent transaction
-```
+- Machine Learning model training
+- Feature engineering
+- Fraud probability prediction
+- REST API with FastAPI
+- Automated testing with Pytest
+- Logging system
+- Interactive API documentation (Swagger UI)
+- Docker support
 
 ---
 
-# 🛠️ Technologies Used
+## 🧠 Model Details
 
-* Python
-* Pandas
-* NumPy
-* Matplotlib
-* Scikit-Learn
-* Joblib
-* Jupyter Notebook
+### Algorithm
+- Random Forest Classifier
 
-Machine Learning concepts used:
+### Features
+- Time
+- V1 → V28 (PCA-transformed features)
+- Amount
 
-* Pipelines
-* Random Forest
-* Logistic Regression
-* Gradient Boosting
-* GridSearchCV
-* Cross Validation
-* ROC-AUC
-* Precision-Recall Curve
-* Threshold Tuning
-* Calibration
-* Drift Monitoring
-* Feature Importance
-* Model Serialization
+### Feature Engineering
+- `Amount_log = log1p(Amount)`
 
----
+### Output Example
 
-# ⚙️ Project Workflow
-
-The project follows an end-to-end machine learning pipeline:
-
-1. Data Loading
-2. Exploratory Data Analysis (EDA)
-3. Data Cleaning
-4. Feature Engineering
-5. Model Building
-6. Hyperparameter Tuning
-7. Model Evaluation
-8. Threshold Optimization
-9. Calibration Analysis
-10. Monitoring
-11. Explainability
-12. Production Inference
-13. Final Model Selection
-
----
-
-# 🧹 Feature Engineering
-
-A log transformation was applied to transaction amounts:
-
-```python
-Amount_log = np.log1p(Amount)
-```
-
-Purpose:
-
-* reduce skewness
-* improve numerical stability
-* normalize transaction amount distribution
-
----
-
-# 🤖 Models Evaluated
-
-Several machine learning models were tested and compared.
-
-| Model                         | Precision | Recall | F1 Score |
-| ----------------------------- | --------- | ------ | -------- |
-| Logistic Regression           | 0.85      | 0.73   | 0.79     |
-| Logistic Regression + Scaling | 0.83      | 0.63   | 0.72     |
-| Gradient Boosting             | 0.83      | 0.60   | 0.70     |
-| Random Forest                 | 0.94      | 0.83   | 0.88     |
-| Tuned Random Forest           | 0.93      | 0.81   | 0.86     |
-
----
-
-# 🏆 Final Selected Model
-
-## Random Forest Classifier
-
-Random Forest was selected as the final production-ready model because it achieved the strongest balance between:
-
-* precision
-* recall
-* robustness
-* generalization
-
-### Why Random Forest?
-
-The model provided:
-
-* strong fraud detection capability
-* low false positive rate
-* stable cross-validation performance
-* excellent ROC-AUC score
-* strong performance on imbalanced data
-
----
-
-# 📊 Final Model Performance
-
-| Metric    | Score  |
-| --------- | ------ |
-| Precision | 0.95   |
-| Recall    | 0.82   |
-| F1 Score  | 0.88   |
-| ROC-AUC   | 0.9787 |
-
-### Confusion Matrix
-
-```text
-TN = 56860
-FP = 4
-FN = 18
-TP = 80
-```
-
-Interpretation:
-
-* Only 4 legitimate transactions were incorrectly flagged as fraud.
-* The model successfully detected 80 fraudulent transactions.
-* 18 fraud cases were missed.
-
----
-
-# 📈 ROC-AUC Analysis
-
-ROC-AUC score:
-
-```text
-0.9787
-```
-
-A high ROC-AUC indicates that the model can effectively separate fraudulent transactions from normal ones.
-
----
-
-# 📉 Precision-Recall Curve
-
-Because fraud detection is highly imbalanced, Precision-Recall analysis was essential.
-
-The model maintained:
-
-* strong precision
-* strong recall
-* balanced fraud detection performance
-
-This metric is often more informative than accuracy for fraud detection systems.
-
----
-
-# 🎯 Threshold Optimization
-
-Different prediction thresholds were evaluated.
-
-### Threshold Tradeoff
-
-Lower threshold:
-
-* higher recall
-* more fraud detection
-* more false positives
-
-Higher threshold:
-
-* fewer false positives
-* lower recall
-* higher chance of missing fraud
-
-This analysis simulates real-world business decisions in banking systems.
-
----
-
-# 📏 Calibration Analysis
-
-Calibration was performed to evaluate whether model probabilities reflected actual fraud likelihood.
-
-This is important in financial systems because probability confidence directly impacts business decisions.
-
----
-
-# 📡 Monitoring & Drift Detection
-
-Feature drift monitoring was simulated by comparing train and test feature distributions.
-
-This helps detect changes in customer transaction behavior over time.
-
-Why this matters:
-
-Fraud patterns evolve.
-
-A model that performs well today may degrade in production if transaction distributions shift.
-
----
-
-# 🔍 Feature Importance
-
-Feature importance analysis identified the most influential variables affecting fraud detection.
-
-Top features included:
-
-* V17
-* V14
-* V12
-* V10
-* V16
-
-This provides interpretability and insight into model behavior.
-
----
-
-# 🔮 Production Inference
-
-A reusable inference pipeline was built to simulate real-world prediction systems.
-
-Example:
-
-```python
-result = predict_transaction(
-    model,
-    sample_transaction
-)
-
-print(result)
-```
-
-Example output:
-
-```python
+```json
 {
     "prediction": 0,
-    "fraud_probability": 0.000047
+    "fraud_probability": 0.0001235
 }
-```
+````
 
-Meaning:
+Where:
 
-* prediction = 0 → legitimate transaction
-* fraud probability ≈ 0.0047%
-
----
-
-# 🔧 Hyperparameter Tuning
-
-GridSearchCV was used to optimize model parameters.
-
-Best parameters:
-
-```python
-{
-    'model__max_depth': 15,
-    'model__min_samples_split': 2,
-    'model__n_estimators': 100
-}
-```
-
-Observation:
-
-Hyperparameter tuning did not outperform the baseline Random Forest.
-
-This demonstrates an important machine learning lesson:
-
-**More tuning does not always guarantee better performance.**
+* `0` = Legitimate Transaction
+* `1` = Fraudulent Transaction
 
 ---
 
-# 🧪 Cross Validation
-
-Cross-validation was performed to evaluate model stability.
-
-Results showed:
-
-* consistent performance
-* strong generalization
-* low performance variance
-
-This increases confidence in model robustness.
-
----
-
-# 📁 Project Structure
+## 📁 Project Structure
 
 ```text
 Credit-Card-Fraud-Detection/
+│── api.py
+│── requirements.txt
+│── Dockerfile
+│── compose.yaml
+│── README.md
+│── .gitignore
 │
 ├── data/
 │   └── creditcard.csv
 │
+├── logs/
+│   └── app.log
+│
+├── models/
+│   ├── final_fraud_pipeline.pkl
+│   ├── random_forest_baseline.pkl
+│   └── tuned_random_forest.pkl
+│
 ├── notebooks/
-│   └── Credit-Card-Fraud-Detection.ipynb
+│   ├── Credit-Card-Fraud-Detection.ipynb
+│   └── Final-Credit-Card-Fraud-Detection.ipynb
 │
 ├── src/
 │   ├── __init__.py
 │   ├── preprocessing.py
 │   ├── training.py
+│   ├── inference.py
 │   ├── evaluation.py
-│   └── inference.py
+│   └── logger.py
 │
-├── models/
-│   ├── fraud_detection_model.pkl
-│   ├── fraud_detection_pipeline.pkl
-│   └── final_fraud_pipeline.pkl
-│
-├── images/
-│
-├── requirements.txt
-│
-├── .gitignore
-│
-└── README.md
+└── tests/
+    └── test_api.py
 ```
 
 ---
 
-# ▶️ How to Run
+## ⚙️ Installation
 
-## 1. Clone the repository
+### 1. Clone Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/YOUR_USERNAME/Credit-Card-Fraud-Detection.git
+cd Credit-Card-Fraud-Detection
 ```
 
-## 2. Install dependencies
+### 2. Create Virtual Environment
+
+```bash
+python -m venv venv
+```
+
+### 3. Activate Environment
+
+#### Windows
+
+```bash
+venv\Scripts\activate
+```
+
+#### Mac/Linux
+
+```bash
+source venv/bin/activate
+```
+
+### 4. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## 3. Open Jupyter Notebook
+---
+
+## ▶️ Run the API
+
+Start the FastAPI server:
 
 ```bash
-jupyter notebook
+uvicorn api:app --reload
 ```
 
-## 4. Run the notebook
+The API will run at:
 
-Run all notebook cells from top to bottom.
-
----
-
-# 🚀 Future Improvements
-
-Potential future upgrades include:
-
-* REST API deployment
-* Docker containerization
-* Real-time fraud detection
-* MLflow experiment tracking
-* SHAP explainability
-* Streamlit dashboard
+```text
+http://127.0.0.1:8000
+```
 
 ---
 
-# 🎯 Final Conclusion
+## 📘 API Documentation
 
-In this project, multiple machine learning models were evaluated for credit card fraud detection.
+Swagger UI:
 
-Advanced machine learning concepts were applied, including:
+```text
+http://127.0.0.1:8000/docs
+```
 
-* feature engineering
-* pipelines
-* hyperparameter tuning
-* ROC-AUC analysis
-* Precision-Recall analysis
-* threshold tuning
-* calibration
-* monitoring
-* explainability
-* production-style inference
+### Available Endpoints
 
-After experimentation and evaluation, Random Forest was selected as the final production-ready model due to its strong balance between precision, recall, and robustness.
+#### Home Endpoint
 
-This project demonstrates a complete end-to-end machine learning workflow for solving a real-world fraud detection problem.
+```http
+GET /
+```
+
+#### Health Check
+
+```http
+GET /health
+```
+
+Example Response:
+
+```json
+{
+    "status": "healthy",
+    "model_loaded": true
+}
+```
+
+#### Fraud Prediction
+
+```http
+POST /predict
+```
+
+Example Request:
+
+```json
+{
+    "Time": 0,
+    "V1": -1.359807,
+    "V2": -0.072781,
+    "V3": 2.536347,
+    "V4": 1.378155,
+    "V5": -0.338321,
+    "V6": 0.462388,
+    "V7": 0.239599,
+    "V8": 0.098698,
+    "V9": 0.363787,
+    "V10": 0.090794,
+    "V11": -0.5516,
+    "V12": -0.617801,
+    "V13": -0.99139,
+    "V14": -0.311169,
+    "V15": 1.468177,
+    "V16": -0.470401,
+    "V17": 0.207971,
+    "V18": 0.025791,
+    "V19": 0.403993,
+    "V20": 0.251412,
+    "V21": -0.018307,
+    "V22": 0.277838,
+    "V23": -0.110474,
+    "V24": 0.066928,
+    "V25": 0.128539,
+    "V26": -0.189115,
+    "V27": 0.133558,
+    "V28": -0.021053,
+    "Amount": 149.62
+}
+```
+
+Example Response:
+
+```json
+{
+    "prediction": 0,
+    "fraud_probability": 0.0001235
+}
+```
+
+---
+
+## 🧪 Running Tests
+
+Run tests using:
+
+```bash
+python -m pytest
+```
+
+Expected output:
+
+```text
+3 passed
+```
+
+---
+
+## 🐳 Docker Support
+
+Build and run the application:
+
+```bash
+docker compose up --build
+```
+
+Application will be available at:
+
+```text
+http://localhost:8000
+```
+
+---
+
+## 📊 Tech Stack
+
+* Python
+* FastAPI
+* Scikit-Learn
+* Pandas
+* NumPy
+* Joblib
+* Pytest
+* Docker
+* Uvicorn
+
+---
+
+## 📌 Future Improvements
+
+* CI/CD Pipeline
+* Cloud Deployment (AWS / Azure / GCP)
+* Model Monitoring
+* Real-time Fraud Detection
+* Model Versioning
+* Advanced Feature Engineering
+
+---
+
+## 👨‍💻 Author
+
+**Mersy**
+AI Engineer | Data Science | Machine Learning

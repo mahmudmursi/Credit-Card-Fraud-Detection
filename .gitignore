@@ -1,4 +1,37 @@
+# Python
 __pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+venv/
+.env/
+
+# Jupyter
 .ipynb_checkpoints/
-*.pkl
-.env
+
+# Logs
+logs/
+*.log
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Testing
+.pytest_cache/
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# Large data files
+data/*.csv
+
+# Temporary files
+*.tmp
+*.temp
