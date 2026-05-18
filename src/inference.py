@@ -1,29 +1,21 @@
-import joblib
+import numpy as np
 
 
-def load_model(path):
+def predict_transaction(model, sample):
 
-    return joblib.load(path)
+    # Create Amount_log feature
+    sample["Amount_log"] = np.log1p(sample["Amount"])
 
+    # Match exact training features
+    sample = sample[model.feature_names_in_]
 
-def predict_transaction(
-    model,
-    sample
-):
+    prediction = int(model.predict(sample)[0])
 
-    prediction = model.predict(
-        sample
-    )[0]
-
-    probability = model.predict_proba(
-        sample
-    )[:,1][0]
+    probability = float(
+        model.predict_proba(sample)[0][1]
+    )
 
     return {
-
-        "prediction":
-        int(prediction),
-
-        "fraud_probability":
-        float(probability)
+        "prediction": prediction,
+        "fraud_probability": probability
     }
