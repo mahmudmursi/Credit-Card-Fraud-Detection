@@ -287,5 +287,6 @@ http://localhost:8000
 
 ## 👨‍💻 Author
 
-**Mersy**
+**Mahmoud Morsy**
+
 AI Engineer | Data Science | Machine Learning
