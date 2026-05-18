@@ -1,0 +1,22 @@
+2026-05-18 22:12:09,846 - INFO - Model loaded successfully
+2026-05-18 22:12:11,503 - INFO - Model loaded successfully
+2026-05-18 22:14:03,343 - ERROR - Prediction error: The feature names should match those that were passed during fit.
+Feature names seen at fit time, yet now missing:
+- Amount_log
+
+2026-05-18 22:14:05,564 - ERROR - Prediction error: The feature names should match those that were passed during fit.
+Feature names seen at fit time, yet now missing:
+- Amount_log
+
+2026-05-18 22:15:28,279 - ERROR - Prediction error: The feature names should match those that were passed during fit.
+Feature names seen at fit time, yet now missing:
+- Amount_log
+
+2026-05-18 22:17:11,736 - INFO - Model loaded successfully
+2026-05-18 22:17:28,961 - INFO - Model loaded successfully
+2026-05-18 22:17:30,422 - INFO - Model loaded successfully
+2026-05-18 22:17:45,826 - INFO - Prediction made | Amount=149.62 | Prediction=0 | Probability=0.00012350002250250284
+2026-05-18 22:40:00,349 - INFO - Model loaded successfully
+2026-05-18 22:40:10,708 - INFO - Prediction made | Amount=149.62 | Prediction=0 | Probability=0.00012350002250250284
+2026-05-18 22:49:43,274 - INFO - Model loaded successfully
+2026-05-18 22:55:01,380 - INFO - Model loaded successfully
